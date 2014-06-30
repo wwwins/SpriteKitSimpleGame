@@ -31,13 +31,13 @@
     return self;
 }
 
-// 離開這個 view 會做的事
+// called the method before this view is removed.
 -(void)willMoveFromView:(SKView *)view
 {
   
 }
 
-// 移動到這個 view 要做的事
+// called the method after this view is presented.
 -(void)didMoveToView:(SKView *)view
 {
   // create label node
@@ -100,7 +100,8 @@
         sprite.color = [SKColor redColor];
         sprite.colorBlendFactor = 0.5;
         sprite.position = location;
-        
+      
+        // add actions for the sprite
         SKAction *action = [SKAction rotateByAngle:M_PI duration:1];
         SKAction *actionMove = [SKAction moveTo:CGPointMake(0, 0) duration:1];
         SKAction *actionRemove = [SKAction removeFromParent];
@@ -113,7 +114,7 @@
         
         [self addChild:sprite];
 
-        // create path
+        // create a mutable path
         _pathToDraw = CGPathCreateMutable();
         CGPathMoveToPoint(_pathToDraw, NULL, location.x, location.y);
         _lineNode = [SKShapeNode node];
@@ -131,6 +132,7 @@
   
   UITouch *touch = [touches anyObject];
   CGPoint location = [touch locationInNode:self];
+  // add a line from the current point to the new location
   CGPathAddLineToPoint(_pathToDraw, NULL, location.x, location.y);
   _lineNode.path = _pathToDraw;
   
